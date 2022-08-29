@@ -1,3 +1,3 @@
 ## Technologies
 
-NestJs, Typescript, Socket.IO
+NestJS, Typescript, Socket.IO

@@ -17,6 +17,20 @@ type PaintCoords = {
 @WebSocketGateway({ cors: true })
 export class AppGateway {
   @WebSocketServer() server: Server;
+
+  @SubscribeMessage('send_message')
+  async onSendMessage(
+    @MessageBody() data: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const sockets = await this.server.fetchSockets();
+    sockets.forEach((s) => {
+      if (s.id !== socket.id) {
+        socket.broadcast.to('test').emit('receive_message', data);
+      }
+    });
+  }
+
   @SubscribeMessage('paint')
   async painting(
     @MessageBody() data: PaintCoords,

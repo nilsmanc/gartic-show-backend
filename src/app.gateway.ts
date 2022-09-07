@@ -23,12 +23,8 @@ export class AppGateway {
     @MessageBody() data: string,
     @ConnectedSocket() socket: Socket,
   ) {
-    const sockets = await this.server.fetchSockets();
-    sockets.forEach((s) => {
-      if (s.id !== socket.id) {
-        socket.broadcast.to('test').emit('receive_message', data);
-      }
-    });
+    socket.emit('receive_message', data);
+    socket.broadcast.to('test').emit('receive_message', data);
   }
 
   @SubscribeMessage('paint')
